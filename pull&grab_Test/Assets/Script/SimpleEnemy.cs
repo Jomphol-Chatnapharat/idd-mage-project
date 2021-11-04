@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SimpleEnemy : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class SimpleEnemy : MonoBehaviour
 
     bool _grounded = false;
     public float FallDamage;
+    
+    [SerializeField] private Image fillImage;
+
     
     // Start is called before the first frame update
     void Start()
@@ -93,5 +97,13 @@ public class SimpleEnemy : MonoBehaviour
     public void OnDamaged(int Damage)
     {
         CurrentHp -= Damage;
+        UIManager.instance.SetDamagePopupText("-" + Damage, transform.position);
+        SetHealthImageAmount(CurrentHp / MaxHp);
     }
+    
+    public void SetHealthImageAmount(float newAmount)
+    {
+        fillImage.fillAmount = newAmount;
+    }
+
 }
