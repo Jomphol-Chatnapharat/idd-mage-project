@@ -28,7 +28,6 @@ public class Box : MonoBehaviour
         {
             Vector3 vel = BoxRb.velocity;
 
-            Debug.Log(vel.magnitude);
             if (vel.magnitude > minSpeed)
             {
                 other.gameObject.GetComponent<SimpleEnemy>().OnDamaged(BoxDmg);

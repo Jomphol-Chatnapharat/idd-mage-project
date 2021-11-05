@@ -11,22 +11,38 @@ public class Gravitygun : MonoBehaviour
 
     Rigidbody grabbedRB;
 
+    public float maxMana;
+    public float currentMana;
+
+    public float useMana;
+    public float regenMana;
+
     void Start()
     {
-        
+        currentMana = maxMana;
     }
 
     void Update()
     {
+        if (currentMana < maxMana)
+        {
+            currentMana += regenMana * Time.deltaTime;
+        }
+
         if (grabbedRB)
         {
             grabbedRB.MovePosition(objectHolder.transform.position);
 
             if (Input.GetMouseButtonDown(0))
             {
-                grabbedRB.isKinematic = false;
-                grabbedRB.AddForce(cam.transform.forward * throwForce, ForceMode.VelocityChange);
-                grabbedRB = null;
+                if (currentMana >= useMana)
+                {
+                    grabbedRB.isKinematic = false;
+                    grabbedRB.AddForce(cam.transform.forward * throwForce, ForceMode.VelocityChange);
+                    grabbedRB = null;
+
+                    currentMana -= useMana;
+                }
             }
         }
 
@@ -51,5 +67,10 @@ public class Gravitygun : MonoBehaviour
                 }
             }
         }
+    }
+
+    void ManaRegen()
+    {
+        currentMana += regenMana;
     }
 }

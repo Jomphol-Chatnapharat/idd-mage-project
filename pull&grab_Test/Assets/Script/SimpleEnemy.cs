@@ -9,6 +9,9 @@ public class SimpleEnemy : MonoBehaviour
 
     public float MaxHp;
     public float CurrentHp;
+    public float MaxArmor;
+    public float CurArmor;
+
     public Rigidbody enemyRb;
     public int bodyDmg;
 
@@ -28,12 +31,13 @@ public class SimpleEnemy : MonoBehaviour
     void Start()
     {
         CurrentHp = MaxHp;
+        CurArmor = MaxArmor;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(CurrentHp <= 60)
+        if(CurArmor == 0)
         {
             this.gameObject.layer = 0;
         }
@@ -80,7 +84,7 @@ public class SimpleEnemy : MonoBehaviour
     {
         Vector3 vel = enemyRb.velocity;
 
-        if (enemyRb.freezeRotation == false)
+        if (this.gameObject.layer == 0)
         {
             if (other.gameObject.tag == "Enemy")
             {
@@ -88,6 +92,7 @@ public class SimpleEnemy : MonoBehaviour
                 //Debug.Log(vel.magnitude);
                 if (vel.magnitude > minSpeed)
                 {
+                    other.gameObject.GetComponent<SimpleEnemy>().OnDamaged(bodyDmg);
                     OnDamaged(bodyDmg);
                 }
             }
@@ -96,7 +101,13 @@ public class SimpleEnemy : MonoBehaviour
 
     public void OnDamaged(int Damage)
     {
-        CurrentHp -= Damage;
+        CurArmor -= Damage;
+        if (CurArmor <= 0)
+        {
+            CurrentHp += CurArmor;
+            CurArmor = 0;
+        }
+
         UIManager.instance.SetDamagePopupText("-" + Damage, transform.position);
         SetHealthImageAmount(CurrentHp / MaxHp);
     }
