@@ -26,6 +26,7 @@ public class SFPSC_PlayerMovement : MonoBehaviour
 {
     private static Vector3 vecZero = Vector3.zero;
     private Rigidbody rb;
+    private Gravitygun wandData;
 
     private bool enableMovement = true;
 
@@ -50,6 +51,8 @@ public class SFPSC_PlayerMovement : MonoBehaviour
     {
         rb = this.GetComponent<Rigidbody>();
 
+        wandData = this.GetComponent<Gravitygun>();
+
         TryGetWallRun();
         TryGetGrapplingHook();
     }
@@ -72,43 +75,47 @@ public class SFPSC_PlayerMovement : MonoBehaviour
     private float prevY;
     private void FixedUpdate()
     {
-        if ((wallRun != null && wallRun.IsWallRunning) || (grapplingHook != null && grapplingHook.IsGrappling))
-            isGrounded = false;
-        else
+        if (wandData.isCharging == false)
         {
-            // I recieved several messages that there are some bugs and I found out that the ground check is not working properly
-            // so I made this one. It's faster and all it needs is the velocity of the rigidbody in two frames.
-            // It works pretty well!
-            isGrounded = (Mathf.Abs(rb.velocity.y - prevY) < .1f) && (Physics.OverlapSphere(groundChecker.position, groundCheckerDist).Length > 1); // > 1 because it also counts the player
-            prevY = rb.velocity.y;
-        }
 
-        // Input
-        vInput = Input.GetAxisRaw("Vertical");
-        hInput = Input.GetAxisRaw("Horizontal");
-
-        // Clamping speed
-        rb.velocity = ClampMag(rb.velocity, maximumPlayerSpeed);
-
-        if (!enableMovement)
-            return;
-        inputForce = (transform.forward * vInput + transform.right * hInput).normalized * (Input.GetKey(SFPSC_KeyManager.Run) ? runSpeed : walkSpeed);
-
-        if (isGrounded)
-        {
-            // Jump
-            if (Input.GetButton("Jump") && !jumpBlocked)
+            if ((wallRun != null && wallRun.IsWallRunning) || (grapplingHook != null && grapplingHook.IsGrappling))
+                isGrounded = false;
+            else
             {
-                rb.AddForce(-jumpForce * rb.mass * Vector3.down);
-                jumpBlocked = true;
-                Invoke("UnblockJump", jumpCooldown);
+                // I recieved several messages that there are some bugs and I found out that the ground check is not working properly
+                // so I made this one. It's faster and all it needs is the velocity of the rigidbody in two frames.
+                // It works pretty well!
+                isGrounded = (Mathf.Abs(rb.velocity.y - prevY) < .1f) && (Physics.OverlapSphere(groundChecker.position, groundCheckerDist).Length > 1); // > 1 because it also counts the player
+                prevY = rb.velocity.y;
             }
-            // Ground controller
-            rb.velocity = Vector3.Lerp(rb.velocity, inputForce, changeInStageSpeed * Time.fixedDeltaTime);
+
+            // Input
+            vInput = Input.GetAxisRaw("Vertical");
+            hInput = Input.GetAxisRaw("Horizontal");
+
+            // Clamping speed
+            rb.velocity = ClampMag(rb.velocity, maximumPlayerSpeed);
+
+            if (!enableMovement)
+                return;
+            inputForce = (transform.forward * vInput + transform.right * hInput).normalized * (Input.GetKey(SFPSC_KeyManager.Run) ? runSpeed : walkSpeed);
+
+            if (isGrounded)
+            {
+                // Jump
+                if (Input.GetButton("Jump") && !jumpBlocked)
+                {
+                    rb.AddForce(-jumpForce * rb.mass * Vector3.down);
+                    jumpBlocked = true;
+                    Invoke("UnblockJump", jumpCooldown);
+                }
+                // Ground controller
+                rb.velocity = Vector3.Lerp(rb.velocity, inputForce, changeInStageSpeed * Time.fixedDeltaTime);
+            }
+            else
+                // Air control
+                rb.velocity = ClampSqrMag(rb.velocity + inputForce * Time.fixedDeltaTime, rb.velocity.sqrMagnitude);
         }
-        else
-            // Air control
-            rb.velocity = ClampSqrMag(rb.velocity + inputForce * Time.fixedDeltaTime, rb.velocity.sqrMagnitude);
     }
 
     private static Vector3 ClampSqrMag(Vector3 vec, float sqrMag)

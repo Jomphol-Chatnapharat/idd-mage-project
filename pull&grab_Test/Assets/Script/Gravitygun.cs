@@ -17,6 +17,8 @@ public class Gravitygun : MonoBehaviour
     public float useMana;
     public float regenMana;
 
+    public bool isCharging = false;
+
     void Start()
     {
         currentMana = maxMana;
@@ -24,45 +26,53 @@ public class Gravitygun : MonoBehaviour
 
     void Update()
     {
-        if (currentMana < maxMana)
+        if (Input.GetMouseButton(1))
         {
-            currentMana += regenMana * Time.deltaTime;
+            isCharging = true;
+            ManaRegen();
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            isCharging = false;
         }
 
-        if (grabbedRB)
-        {
-            grabbedRB.MovePosition(objectHolder.transform.position);
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (currentMana >= useMana)
-                {
-                    grabbedRB.isKinematic = false;
-                    grabbedRB.AddForce(cam.transform.forward * throwForce, ForceMode.VelocityChange);
-                    grabbedRB = null;
-
-                    currentMana -= useMana;
-                }
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
+        if (isCharging == false)
         {
             if (grabbedRB)
             {
-                grabbedRB.isKinematic = false;
-                grabbedRB = null;
-            }
-            else
-            {
-                RaycastHit hit;
-                Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
-                if(Physics.Raycast(ray, out hit, maxGrabDistance, LayerMask))
+                grabbedRB.MovePosition(objectHolder.transform.position);
+
+                if (Input.GetMouseButtonDown(0))
                 {
-                    grabbedRB = hit.collider.gameObject.GetComponent<Rigidbody>();
-                    if (grabbedRB)
+                    if (currentMana >= useMana)
                     {
-                        grabbedRB.isKinematic = true;
+                        grabbedRB.isKinematic = false;
+                        grabbedRB.AddForce(cam.transform.forward * throwForce, ForceMode.VelocityChange);
+                        grabbedRB = null;
+
+                        currentMana -= useMana;
+                    }
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                if (grabbedRB)
+                {
+                    grabbedRB.isKinematic = false;
+                    grabbedRB = null;
+                }
+                else
+                {
+                    RaycastHit hit;
+                    Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+                    if (Physics.Raycast(ray, out hit, maxGrabDistance, LayerMask))
+                    {
+                        grabbedRB = hit.collider.gameObject.GetComponent<Rigidbody>();
+                        if (grabbedRB)
+                        {
+                            grabbedRB.isKinematic = true;
+                        }
                     }
                 }
             }
@@ -71,6 +81,11 @@ public class Gravitygun : MonoBehaviour
 
     void ManaRegen()
     {
-        currentMana += regenMana;
+        if (currentMana < maxMana)
+        {
+            currentMana += regenMana * Time.deltaTime;
+        }
     }
+
+
 }
