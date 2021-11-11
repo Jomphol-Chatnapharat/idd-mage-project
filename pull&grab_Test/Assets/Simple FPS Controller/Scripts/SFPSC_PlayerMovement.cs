@@ -28,7 +28,7 @@ public class SFPSC_PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private Gravitygun wandData;
     
-    private bool enableMovement = true;
+    public bool enableMovement = true;
 
     [Header("Movement properties")]
     public float walkSpeed = 8.0f;

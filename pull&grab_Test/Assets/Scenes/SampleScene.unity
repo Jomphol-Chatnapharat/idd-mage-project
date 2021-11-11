@@ -4957,6 +4957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec39ce101b75a44ba203f9e9cbaa8b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableMovement: 1
   walkSpeed: 8
   runSpeed: 12
   changeInStageSpeed: 10
@@ -5003,6 +5004,7 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 512
+  isCharging: 0
   maxMana: 100
   currentMana: 0
   useMana: 25
