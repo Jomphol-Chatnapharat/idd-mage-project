@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
              .OnComplete(()=>
              {
                 damageTextPop.transform.DOScale(0f, 1f);
+                damageTextPop.DOKill(true);
                 Destroy(damageTextPop.gameObject);
              });
        }

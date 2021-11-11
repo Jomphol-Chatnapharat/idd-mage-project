@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using EPOOutline;
 using UnityEngine;
 
 public class Box : MonoBehaviour
@@ -9,18 +9,28 @@ public class Box : MonoBehaviour
     public int BoxDmg;
 
     private GameObject TargetEnemy;
-
+   
     void Awake()
     {
         BoxRb = GetComponent<Rigidbody>();
-
         //TargetEnemy = GameObject.FindGameObjectWithTag("Enemy");
     }
+    
 
-    void Update()
+    private void OnMouseEnter()
     {
-
+        if (!BoxRb.isKinematic)
+        {
+            GetComponent<Outlinable>().enabled = true;
+        }
+       
     }
+
+    private void OnMouseExit()
+    {
+        GetComponent<Outlinable>().enabled = false;
+    }
+
 
     private void OnCollisionEnter(Collision other)
     {

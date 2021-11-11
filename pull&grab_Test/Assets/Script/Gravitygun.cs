@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using EPOOutline;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Gravitygun : MonoBehaviour
 {
@@ -17,9 +19,12 @@ public class Gravitygun : MonoBehaviour
     public float useMana;
     public float regenMana;
 
+    public Slider manaSlider;
+
     void Start()
     {
         currentMana = maxMana;
+        manaSlider.value = currentMana;
     }
 
     void Update()
@@ -27,6 +32,7 @@ public class Gravitygun : MonoBehaviour
         if (currentMana < maxMana)
         {
             currentMana += regenMana * Time.deltaTime;
+            manaSlider.value = currentMana;
         }
 
         if (grabbedRB)
@@ -42,6 +48,7 @@ public class Gravitygun : MonoBehaviour
                     grabbedRB = null;
 
                     currentMana -= useMana;
+                    manaSlider.value = currentMana;
                 }
             }
         }
@@ -60,17 +67,22 @@ public class Gravitygun : MonoBehaviour
                 if(Physics.Raycast(ray, out hit, maxGrabDistance, LayerMask))
                 {
                     grabbedRB = hit.collider.gameObject.GetComponent<Rigidbody>();
+                   
                     if (grabbedRB)
                     {
+                        hit.transform.GetComponent<Outlinable>().enabled = false;
                         grabbedRB.isKinematic = true;
                     }
                 }
             }
         }
+        
+    
     }
 
     void ManaRegen()
     {
         currentMana += regenMana;
+        manaSlider.value = currentMana;
     }
 }
