@@ -1755,7 +1755,7 @@ MonoBehaviour:
     dilateShift: 1
     blurShift: 1
     fillPass:
-      shader: {fileID: 4800000, guid: 4b218962224bcd449ba16572d6a50cee, type: 3}
+      shader: {fileID: 0}
       serializedProperties:
       - PropertyName: _PublicColor
         Property:
@@ -3173,7 +3173,7 @@ MonoBehaviour:
     dilateShift: 1
     blurShift: 1
     fillPass:
-      shader: {fileID: 4800000, guid: 4b218962224bcd449ba16572d6a50cee, type: 3}
+      shader: {fileID: 0}
       serializedProperties:
       - PropertyName: _PublicColor
         Property:
@@ -7727,7 +7727,7 @@ MonoBehaviour:
     dilateShift: 1
     blurShift: 1
     fillPass:
-      shader: {fileID: 4800000, guid: 4b218962224bcd449ba16572d6a50cee, type: 3}
+      shader: {fileID: 0}
       serializedProperties:
       - PropertyName: _PublicColor
         Property:
@@ -9257,7 +9257,7 @@ MonoBehaviour:
     dilateShift: 1
     blurShift: 1
     fillPass:
-      shader: {fileID: 4800000, guid: 4b218962224bcd449ba16572d6a50cee, type: 3}
+      shader: {fileID: 0}
       serializedProperties:
       - PropertyName: _PublicColor
         Property:
