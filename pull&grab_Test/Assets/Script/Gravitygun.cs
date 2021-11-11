@@ -10,6 +10,7 @@ public class Gravitygun : MonoBehaviour
     [SerializeField] float maxGrabDistance = 10f, throwForce = 20f, lerpSpeed = 10f;
     [SerializeField] Transform objectHolder;
     [SerializeField] LayerMask LayerMask;
+    private bool isCharging;
 
     Rigidbody grabbedRB;
 

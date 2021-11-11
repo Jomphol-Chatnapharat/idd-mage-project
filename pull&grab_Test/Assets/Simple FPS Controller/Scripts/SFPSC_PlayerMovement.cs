@@ -27,7 +27,7 @@ public class SFPSC_PlayerMovement : MonoBehaviour
     private static Vector3 vecZero = Vector3.zero;
     private Rigidbody rb;
     private Gravitygun wandData;
-
+    
     private bool enableMovement = true;
 
     [Header("Movement properties")]
