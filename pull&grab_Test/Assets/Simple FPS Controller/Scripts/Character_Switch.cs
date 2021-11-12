@@ -20,11 +20,11 @@ public class Character_Switch : MonoBehaviour
 
 
                     this.GetComponent<SFPSC_PlayerMovement>().enabled = false;
-                    this.GetComponent<Gravitygun>().enabled = false;
+                    this.GetComponent<PlayerBehavior>().enabled = false;
                     this.GetComponent<Pull>().enabled = false;
 
                     otherCha.GetComponent<SFPSC_PlayerMovement>().enabled = true;
-                    otherCha.GetComponent<Gravitygun>().enabled = true;
+                    otherCha.GetComponent<PlayerBehavior>().enabled = true;
                     otherCha.GetComponent<Pull>().enabled = true;
                     otherCha.GetComponent<Character_Switch>().enabled = true;
 

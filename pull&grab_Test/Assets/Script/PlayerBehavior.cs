@@ -1,15 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
-public class Gravitygun : MonoBehaviour
+public class PlayerBehavior : MonoBehaviour
 {
     [SerializeField] Camera cam;
     [SerializeField] float maxGrabDistance = 10f, throwForce = 20f, lerpSpeed = 10f;
     [SerializeField] Transform objectHolder;
     [SerializeField] LayerMask LayerMask;
+    [SerializeField] GameObject grabObj;
 
     Rigidbody grabbedRB;
+
+    public float maxHP;
+    public float currentHP;
+    public float regenHP;
 
     public float maxMana;
     public float currentMana;
@@ -21,6 +28,7 @@ public class Gravitygun : MonoBehaviour
 
     void Start()
     {
+        currentHP = maxHP;
         currentMana = maxMana;
     }
 
@@ -50,6 +58,12 @@ public class Gravitygun : MonoBehaviour
                         grabbedRB.AddForce(cam.transform.forward * throwForce, ForceMode.VelocityChange);
                         grabbedRB = null;
 
+                        if (grabObj.GetComponent<EnemyAI>() != null)
+                        {
+                            grabObj.GetComponent<EnemyAI>().enabled = true;
+                            grabObj.GetComponent<NavMeshAgent>().enabled = true;
+                        }
+
                         currentMana -= useMana;
                     }
                 }
@@ -61,6 +75,11 @@ public class Gravitygun : MonoBehaviour
                 {
                     grabbedRB.isKinematic = false;
                     grabbedRB = null;
+                    if (grabObj.GetComponent<EnemyAI>() != null)
+                    {
+                        grabObj.GetComponent<EnemyAI>().enabled = true;
+                        grabObj.GetComponent<NavMeshAgent>().enabled = true;
+                    }
                 }
                 else
                 {
@@ -72,20 +91,32 @@ public class Gravitygun : MonoBehaviour
                         if (grabbedRB)
                         {
                             grabbedRB.isKinematic = true;
+                            grabObj = grabbedRB.gameObject;
+
+                            if (grabObj.GetComponent<EnemyAI>() != null) 
+                            {
+                                grabObj.GetComponent<EnemyAI>().enabled = false;
+                                grabObj.GetComponent<NavMeshAgent>().enabled = false;
+
+                            }
                         }
                     }
                 }
+            }
+
+            if (currentHP <= 0)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }
     }
 
     void ManaRegen()
     {
-        if (currentMana < maxMana)
+        if (currentMana < maxMana || currentHP < maxHP)
         {
             currentMana += regenMana * Time.deltaTime;
+            currentHP += regenHP * Time.deltaTime;
         }
     }
-
-
 }

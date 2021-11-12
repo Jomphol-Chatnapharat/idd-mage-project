@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class SimpleEnemy : MonoBehaviour
 {
@@ -26,12 +27,19 @@ public class SimpleEnemy : MonoBehaviour
     
     [SerializeField] private Image fillImage;
 
+    private EnemyAI AI;
+    private NavMeshAgent navMeshAgent;
+
     
     // Start is called before the first frame update
     void Start()
     {
         CurrentHp = MaxHp;
         CurArmor = MaxArmor;
+
+        AI = GetComponent<EnemyAI>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
+
     }
 
     // Update is called once per frame
@@ -45,6 +53,8 @@ public class SimpleEnemy : MonoBehaviour
         if (CurrentHp <= 0)
         {
             enemyRb.freezeRotation = false;
+            AI.enabled = false;
+            navMeshAgent.enabled = false;
         }
     }
 
