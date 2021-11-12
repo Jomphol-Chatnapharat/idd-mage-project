@@ -26,9 +26,9 @@ public class SFPSC_PlayerMovement : MonoBehaviour
 {
     private static Vector3 vecZero = Vector3.zero;
     private Rigidbody rb;
-    private Gravitygun wandData;
-    
-    public bool enableMovement = true;
+    private PlayerBehavior wandData;
+
+    private bool enableMovement = true;
 
     [Header("Movement properties")]
     public float walkSpeed = 8.0f;
@@ -51,7 +51,7 @@ public class SFPSC_PlayerMovement : MonoBehaviour
     {
         rb = this.GetComponent<Rigidbody>();
 
-        wandData = this.GetComponent<Gravitygun>();
+        wandData = this.GetComponent<PlayerBehavior>();
 
         TryGetWallRun();
         TryGetGrapplingHook();
