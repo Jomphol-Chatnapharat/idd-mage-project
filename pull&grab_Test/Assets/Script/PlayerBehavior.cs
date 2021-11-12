@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerBehavior : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] GameObject grabObj;
 
     Rigidbody grabbedRB;
+
+    public Image hpBar;
+    public Image manaBar;
+
 
     public float maxHP;
     public float currentHP;
@@ -34,6 +39,7 @@ public class PlayerBehavior : MonoBehaviour
 
     void Update()
     {
+
         if (Input.GetMouseButton(1))
         {
             isCharging = true;
@@ -109,6 +115,10 @@ public class PlayerBehavior : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }
+
+        SetHealthImageAmount(currentHP / maxHP);
+        SetManaImageAmount(currentMana / maxMana);
+
     }
 
     void ManaRegen()
@@ -117,6 +127,18 @@ public class PlayerBehavior : MonoBehaviour
         {
             currentMana += regenMana * Time.deltaTime;
             currentHP += regenHP * Time.deltaTime;
+
+
         }
+    }
+
+    public void SetHealthImageAmount(float newAmount)
+    {
+        hpBar.fillAmount = newAmount;
+    }
+
+    public void SetManaImageAmount(float newAmount)
+    {
+        manaBar.fillAmount = newAmount;
     }
 }
