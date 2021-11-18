@@ -30,6 +30,9 @@ public class SimpleEnemy : MonoBehaviour
     private EnemyAI AI;
     private NavMeshAgent navMeshAgent;
 
+    public bool isShieldOn;
+    public GameObject shield;
+    
     
     // Start is called before the first frame update
     void Start()
@@ -98,7 +101,6 @@ public class SimpleEnemy : MonoBehaviour
         {
             if (other.gameObject.tag == "Enemy")
             {
-                
                 //Debug.Log(vel.magnitude);
                 if (vel.magnitude > minSpeed)
                 {
@@ -111,6 +113,16 @@ public class SimpleEnemy : MonoBehaviour
 
     public void OnDamaged(int Damage)
     {
+        if (isShieldOn)
+        {
+            if (shield != null)
+            {
+                isShieldOn = false;
+                shield.SetActive(false);
+            }
+            return;
+        }
+        
         CurArmor -= Damage;
         if (CurArmor <= 0)
         {
