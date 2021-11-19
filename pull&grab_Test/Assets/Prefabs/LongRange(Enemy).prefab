@@ -1,5 +1,51 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &409992170
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 409992172}
+  - component: {fileID: 409992171}
+  m_Layer: 9
+  m_Name: Shooter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &409992172
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409992170}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.01}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1084266707231806281}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &409992171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409992170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4553ba4323697ae42940e1bae3309d81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectile: {fileID: 123256284449679121, guid: 6091a97c03aec904ea935a9c5a45cb44,
+    type: 3}
+  force: 32
 --- !u!1 &483191028395434826
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,7 +55,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6279849133907669729}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RigTail1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +88,7 @@ GameObject:
   - component: {fileID: 1084266706948733165}
   - component: {fileID: 1084266706948733167}
   - component: {fileID: 1084266706948733166}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: HealthFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,6 +188,7 @@ Transform:
   - {fileID: 1084266707821185995}
   - {fileID: 8253464771538784822}
   - {fileID: 3134880150343295833}
+  - {fileID: 409992172}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -190,7 +237,7 @@ MonoBehaviour:
   minFall: 2
   MaxHp: 100
   CurrentHp: 0
-  MaxArmor: 50
+  MaxArmor: 30
   CurArmor: 0
   enemyRb: {fileID: 1084266707231806283}
   bodyDmg: 30
@@ -199,6 +246,7 @@ MonoBehaviour:
   fillImage: {fileID: 1084266706948733166}
   isShieldOn: 1
   shield: {fileID: 2330399796564335725}
+  refundMana: 35
 --- !u!114 &4345883210065952284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,12 +269,16 @@ MonoBehaviour:
     m_Bits: 256
   walkPoint: {x: 0, y: 0, z: 0}
   walkPointRange: 30
-  timeBetweenAttack: 4
+  timeBetweenAttack: 1.5
   sightRange: 25
-  attackRange: 4
+  attackRange: 10
   canSeePlayer: 0
   canAttackPlayer: 0
   attackDmg: 10
+  melee: 0
+  range: 1
+  suicide: 0
+  shooter: {fileID: 409992170}
 --- !u!195 &3029010479650548477
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -261,7 +313,7 @@ GameObject:
   - component: {fileID: 1084266707422485373}
   - component: {fileID: 1084266707422485372}
   - component: {fileID: 1084266707422485374}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: HealthBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -354,7 +406,7 @@ GameObject:
   - component: {fileID: 1084266707821186005}
   - component: {fileID: 1084266707821186004}
   - component: {fileID: 1084266707821186007}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: EnemyHealthUICanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -464,7 +516,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 560601172200392357}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Rig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -494,7 +546,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2819046517611468269}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RigPelvis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5280,7 +5332,7 @@ SphereCollider:
   m_GameObject: {fileID: 2330399796564335725}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 1.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -5293,7 +5345,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 593414546150898902}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RigNeck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5324,7 +5376,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5169276679415911317}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RigSpine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5355,7 +5407,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1642620678207594534}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RigRibcage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5389,7 +5441,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4059561994082011278}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Gloom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5423,7 +5475,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2677952407654537268}
   - component: {fileID: 4869142077939626279}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Gloom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5574,7 +5626,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8036485764045194820}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RigCapeR1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5604,7 +5656,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2657910551352795483}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RigCapeL1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5634,7 +5686,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 303846961919441491}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RigHead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5695,7 +5747,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7301041195497940940}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RigTail2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5726,7 +5778,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5537102013131366547}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RigCapeBack1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5756,7 +5808,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7167627439945586552}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RigTail3
   m_TagString: Untagged
   m_Icon: {fileID: 0}

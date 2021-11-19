@@ -365,7 +365,7 @@ MonoBehaviour:
   minFall: 2
   MaxHp: 100
   CurrentHp: 0
-  MaxArmor: 50
+  MaxArmor: 30
   CurArmor: 0
   enemyRb: {fileID: 1665845923994233655}
   bodyDmg: 30
@@ -374,6 +374,7 @@ MonoBehaviour:
   fillImage: {fileID: 1665845923707011218}
   isShieldOn: 1
   shield: {fileID: 4054768662165120017}
+  refundMana: 30
 --- !u!114 &2620528841666348640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,6 +403,10 @@ MonoBehaviour:
   canSeePlayer: 0
   canAttackPlayer: 0
   attackDmg: 10
+  melee: 1
+  range: 0
+  suicide: 0
+  shooter: {fileID: 0}
 --- !u!195 &3610589625554391681
 NavMeshAgent:
   m_ObjectHideFlags: 0

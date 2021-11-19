@@ -23,6 +23,9 @@ public class EnemyAI : MonoBehaviour
 
     public float attackDmg;
 
+    public bool melee, range, suicide;
+    public GameObject shooter;
+
     private void Awake()
     {
         playerLoc = GameObject.Find("Player1").transform;
@@ -81,13 +84,24 @@ public class EnemyAI : MonoBehaviour
 
         if (!alreadyAttacked)
         {
-            GameObject player = GameObject.Find("Player1");
-
-            player.GetComponent<PlayerBehavior>().currentHP -= attackDmg;
+            if (melee) MeleeAttack();
+            if (range) RangeAttack();
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttack);
         }
+    }
+
+    void MeleeAttack()
+    {
+        GameObject player = GameObject.Find("Player1");
+
+        player.GetComponent<PlayerBehavior>().currentHP -= attackDmg;
+    }
+
+    void RangeAttack()
+    {
+        shooter.GetComponent<Projectile>().Shoot();
     }
 
     private void ResetAttack()

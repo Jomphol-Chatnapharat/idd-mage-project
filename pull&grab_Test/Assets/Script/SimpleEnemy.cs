@@ -32,7 +32,10 @@ public class SimpleEnemy : MonoBehaviour
 
     public bool isShieldOn;
     public GameObject shield;
-    
+
+    public float refundMana;
+
+
     
     // Start is called before the first frame update
     void Start()
@@ -50,7 +53,7 @@ public class SimpleEnemy : MonoBehaviour
     {
         if(CurArmor == 0)
         {
-            this.gameObject.layer = 0;
+            this.gameObject.layer = 12;
         }
 
         if (CurrentHp <= 0)
@@ -115,19 +118,20 @@ public class SimpleEnemy : MonoBehaviour
     {
         if (isShieldOn)
         {
-            if (shield != null)
-            {
-                isShieldOn = false;
-                shield.SetActive(false);
-            }
-            return;
+            GameObject player = GameObject.Find("Player1");
+
+            player.GetComponent<PlayerBehavior>().currentMana += refundMana;
         }
-        
+
         CurArmor -= Damage;
         if (CurArmor <= 0)
         {
+            isShieldOn = false;
+            shield.SetActive(false);
+
             CurrentHp += CurArmor;
             CurArmor = 0;
+
         }
 
         UIManager.instance.SetDamagePopupText("-" + Damage, transform.position);
