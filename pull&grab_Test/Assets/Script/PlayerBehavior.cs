@@ -17,6 +17,8 @@ public class PlayerBehavior : MonoBehaviour
 
     public Image hpBar;
     public Image manaBar;
+    public Text potionIndicator;
+    public Text aetherIndicator;
 
 
     public float maxHP;
@@ -35,6 +37,9 @@ public class PlayerBehavior : MonoBehaviour
     {
         currentHP = maxHP;
         currentMana = maxMana;
+
+        potionIndicator.text = "Potion: " + potionLeft;
+        aetherIndicator.text = "Aether: " + aetherLeft;
     }
 
     void Update()
@@ -64,11 +69,17 @@ public class PlayerBehavior : MonoBehaviour
                         grabbedRB.AddForce(cam.transform.forward * throwForce, ForceMode.VelocityChange);
                         grabbedRB = null;
 
-                        if (grabObj.GetComponent<EnemyAI>() != null)
+                        if (grabObj.GetComponent<SimpleEnemy>() != null)
                         {
-                            grabObj.GetComponent<EnemyAI>().enabled = true;
-                            grabObj.GetComponent<NavMeshAgent>().enabled = true;
+                            grabObj.GetComponent<SimpleEnemy>().unlease = true;
+                            Debug.Log("let go");
                         }
+
+                        //if (grabObj.GetComponent<EnemyAI>() != null)
+                        //{
+                        //        grabObj.GetComponent<EnemyAI>().enabled = true;
+                        //        grabObj.GetComponent<NavMeshAgent>().enabled = true;
+                        //}
 
                         currentMana -= useMana;
                     }
@@ -79,13 +90,18 @@ public class PlayerBehavior : MonoBehaviour
             {
                 if (grabbedRB)
                 {
+                    if (grabObj.GetComponent<SimpleEnemy>() != null)
+                    {
+                        grabObj.GetComponent<SimpleEnemy>().unlease = true;
+                    }
+
                     grabbedRB.isKinematic = false;
                     grabbedRB = null;
-                    if (grabObj.GetComponent<EnemyAI>() != null)
-                    {
-                        grabObj.GetComponent<EnemyAI>().enabled = true;
-                        grabObj.GetComponent<NavMeshAgent>().enabled = true;
-                    }
+                    //if (grabObj.GetComponent<EnemyAI>() != null)
+                    //{
+                    //    grabObj.GetComponent<EnemyAI>().enabled = true;
+                    //    grabObj.GetComponent<NavMeshAgent>().enabled = true;
+                    //}
                 }
                 else
                 {
@@ -96,29 +112,73 @@ public class PlayerBehavior : MonoBehaviour
                         grabbedRB = hit.collider.gameObject.GetComponent<Rigidbody>();
                         if (grabbedRB)
                         {
+
+
                             grabbedRB.isKinematic = true;
                             grabObj = grabbedRB.gameObject;
+
+                            if (grabObj.GetComponent<SimpleEnemy>() != null)
+                            {
+                                grabObj.GetComponent<SimpleEnemy>().unlease = false;
+                            }
 
                             if (grabObj.GetComponent<EnemyAI>() != null) 
                             {
                                 grabObj.GetComponent<EnemyAI>().enabled = false;
                                 grabObj.GetComponent<NavMeshAgent>().enabled = false;
-
                             }
                         }
                     }
                 }
             }
+        }
 
-            if (currentHP <= 0)
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        if (currentHP <= 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        if (currentHP > maxHP)
+        {
+            currentHP = maxHP;
+        }
+
+        if (currentMana > maxMana)
+        {
+            currentMana = maxMana;
         }
 
         SetHealthImageAmount(currentHP / maxHP);
         SetManaImageAmount(currentMana / maxMana);
 
+<<<<<<< Updated upstream
+=======
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            if (potionLeft > 0)
+            {
+                currentHP += potionHeal;
+                potionLeft -= 1;
+                potionIndicator.text = "Potion: " + potionLeft;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            if (aetherLeft > 0)
+            {
+                currentMana += aetherHeal;
+                aetherLeft -= 1;
+                aetherIndicator.text = "Aether: " + aetherLeft;
+            }
+        }
+
+>>>>>>> Stashed changes
     }
 
     void ManaRegen()
@@ -127,8 +187,6 @@ public class PlayerBehavior : MonoBehaviour
         {
             currentMana += regenMana * Time.deltaTime;
             currentHP += regenHP * Time.deltaTime;
-
-
         }
     }
 

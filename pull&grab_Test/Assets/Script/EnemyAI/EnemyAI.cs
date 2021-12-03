@@ -23,6 +23,16 @@ public class EnemyAI : MonoBehaviour
 
     public float attackDmg;
 
+<<<<<<< Updated upstream
+=======
+    public float fleeRange;
+
+    public bool melee, range, suicide;
+    public GameObject shooter;
+
+    float distance;
+
+>>>>>>> Stashed changes
     private void Awake()
     {
         playerLoc = GameObject.Find("Player1").transform;
@@ -35,9 +45,12 @@ public class EnemyAI : MonoBehaviour
 
         canAttackPlayer = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
+        distance = Vector3.Distance(transform.position, playerLoc.position);
+
         if (!canSeePlayer && !canAttackPlayer) Patroling();
         if (canSeePlayer && !canAttackPlayer) Chasing();
-        if (canSeePlayer && canAttackPlayer) Attacking();
+        if (canSeePlayer && canAttackPlayer && distance > fleeRange) Attacking();
+        if (canSeePlayer && canAttackPlayer && range && distance < fleeRange) Flee();
     }
 
     private void Patroling()
@@ -90,6 +103,27 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+<<<<<<< Updated upstream
+=======
+    void MeleeAttack()
+    {
+        GameObject player = GameObject.Find("Player1");
+
+        player.GetComponent<PlayerBehavior>().currentHP -= attackDmg;
+    }
+
+    void RangeAttack()
+    {
+        float distance = Vector3.Distance(transform.position, playerLoc.position);
+
+        if (distance > fleeRange)
+        {
+            shooter.GetComponent<Projectile>().Shoot();
+        }
+
+    }
+
+>>>>>>> Stashed changes
     private void ResetAttack()
     {
         alreadyAttacked = false;
@@ -101,5 +135,14 @@ public class EnemyAI : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, sightRange);
+    }
+
+    void Flee()
+    {
+            Vector3 dirToPlayer = transform.position - playerLoc.position;
+
+            Vector3 newPos = transform.position + dirToPlayer;
+
+            agent.SetDestination(newPos);
     }
 }

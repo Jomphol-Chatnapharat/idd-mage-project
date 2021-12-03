@@ -13,15 +13,19 @@ public class SimpleEnemy : MonoBehaviour
     public float MaxArmor;
     public float CurArmor;
 
+    public bool isDead = false;
+
     public Rigidbody enemyRb;
     public int bodyDmg;
 
     public float minSpeed;
+    public float maxSpeed = 30f;
 
     bool wasGrounded;
     bool wasFalling;
     float startOfFall;
 
+    public float distToGround = 1f;
     bool _grounded = false;
     public float FallDamage;
     
@@ -30,7 +34,22 @@ public class SimpleEnemy : MonoBehaviour
     private EnemyAI AI;
     private NavMeshAgent navMeshAgent;
 
+<<<<<<< Updated upstream
     
+=======
+    public bool isShieldOn;
+    public GameObject shield;
+
+    public float refundMana;
+
+    public bool unlease = true;
+
+    bool isStun = false;
+    public float stunTime;
+
+    public float bodyHp;
+
+>>>>>>> Stashed changes
     // Start is called before the first frame update
     void Start()
     {
@@ -55,6 +74,18 @@ public class SimpleEnemy : MonoBehaviour
             enemyRb.freezeRotation = false;
             AI.enabled = false;
             navMeshAgent.enabled = false;
+
+            isDead = true;
+        }
+
+        if (enemyRb.velocity.magnitude > maxSpeed)
+        {
+            enemyRb.velocity = Vector3.ClampMagnitude(enemyRb.velocity, maxSpeed);
+        }
+
+        if (bodyHp <= 0)
+        {
+            Destroy(this.gameObject);
         }
     }
 
@@ -65,11 +96,14 @@ public class SimpleEnemy : MonoBehaviour
         if (!wasFalling && isFalling) 
         {
             startOfFall = transform.position.y;
+
+
         }
 
         if(!wasGrounded && _grounded)
         {
             float fallDistance = startOfFall - transform.position.y;
+
 
             if (fallDistance > minFall)
             {
@@ -79,13 +113,33 @@ public class SimpleEnemy : MonoBehaviour
             }
         }
 
+        if (_grounded && unlease && AI.enabled == false && !isDead)
+        {
+            isStun = true;
+            Invoke(nameof(AIEnable), stunTime);
+        }
+
+        //if (_grounded)
+        //{
+        //    AI.enabled = true;
+        //    navMeshAgent.enabled = true;
+        //}
+
         wasGrounded = _grounded;
         wasFalling = isFalling;
     }
 
+    void AIEnable()
+    {
+        AI.enabled = true;
+        navMeshAgent.enabled = true;
+
+        isStun = false;
+    }
+
     void CheckGround()
     {
-        _grounded = Physics.Raycast(transform.position + Vector3.up, -Vector3.up, 1.01f);
+        _grounded = Physics.Raycast(transform.position, Vector3.down, distToGround + 0.1f);
     }
 
     bool isFalling { get { return (!_grounded && enemyRb.velocity.y < 0); } }
@@ -94,8 +148,6 @@ public class SimpleEnemy : MonoBehaviour
     {
         Vector3 vel = enemyRb.velocity;
 
-        if (this.gameObject.layer == 0)
-        {
             if (other.gameObject.tag == "Enemy")
             {
                 
@@ -103,21 +155,28 @@ public class SimpleEnemy : MonoBehaviour
                 if (vel.magnitude > minSpeed)
                 {
                     other.gameObject.GetComponent<SimpleEnemy>().OnDamaged(bodyDmg);
+
                     OnDamaged(bodyDmg);
+
+                enemyRb.velocity = Vector3.one;
                 }
             }
-        }
     }
 
     public void OnDamaged(int Damage)
     {
         CurArmor -= Damage;
+
         if (CurArmor <= 0)
         {
             CurrentHp += CurArmor;
             CurArmor = 0;
         }
 
+        if (CurrentHp <= 0)
+        {
+            bodyHp -= 1;
+        }
         UIManager.instance.SetDamagePopupText("-" + Damage, transform.position);
         SetHealthImageAmount(CurrentHp / MaxHp);
     }
@@ -126,5 +185,4 @@ public class SimpleEnemy : MonoBehaviour
     {
         fillImage.fillAmount = newAmount;
     }
-
 }

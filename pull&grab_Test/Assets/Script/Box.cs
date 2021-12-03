@@ -6,9 +6,13 @@ public class Box : MonoBehaviour
 {
     public Rigidbody BoxRb;
     public float minSpeed;
+
+    public float maxSpeed;
     public int BoxDmg;
 
     private GameObject TargetEnemy;
+
+    public float bodyHp;
 
     void Awake()
     {
@@ -17,8 +21,31 @@ public class Box : MonoBehaviour
         //TargetEnemy = GameObject.FindGameObjectWithTag("Enemy");
     }
 
+<<<<<<< Updated upstream
     void Update()
     {
+=======
+    private void Update()
+    {
+        if (BoxRb.velocity.magnitude > maxSpeed)
+        {
+            BoxRb.velocity = Vector3.ClampMagnitude(BoxRb.velocity, maxSpeed);
+        }
+
+        if (bodyHp <= 0)
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+    private void OnMouseEnter()
+    {
+        if (!BoxRb.isKinematic)
+        {
+            GetComponent<Outlinable>().enabled = true;
+        }
+    }
+>>>>>>> Stashed changes
 
     }
 
@@ -32,7 +59,10 @@ public class Box : MonoBehaviour
             {
                 other.gameObject.GetComponent<SimpleEnemy>().OnDamaged(BoxDmg);
 
+                bodyHp -= 1;
             }
+
+            BoxRb.velocity = Vector3.one;
         }
     }
 }
