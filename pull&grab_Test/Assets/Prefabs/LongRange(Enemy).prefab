@@ -222,7 +222,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &1084266707231806282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,7 +243,7 @@ MonoBehaviour:
   isDead: 0
   enemyRb: {fileID: 1084266707231806283}
   bodyDmg: 30
-  minSpeed: 10
+  minSpeed: 20
   maxSpeed: 40
   distToGround: 1
   FallDamage: 20
@@ -277,8 +277,8 @@ MonoBehaviour:
   walkPoint: {x: 0, y: 0, z: 0}
   walkPointRange: 30
   timeBetweenAttack: 1.5
-  sightRange: 30
-  attackRange: 25
+  sightRange: 20
+  attackRange: 9
   canSeePlayer: 0
   canAttackPlayer: 0
   attackDmg: 10

@@ -23,8 +23,6 @@ public class EnemyAI : MonoBehaviour
 
     public float attackDmg;
 
-<<<<<<< Updated upstream
-=======
     public float fleeRange;
 
     public bool melee, range, suicide;
@@ -32,7 +30,6 @@ public class EnemyAI : MonoBehaviour
 
     float distance;
 
->>>>>>> Stashed changes
     private void Awake()
     {
         playerLoc = GameObject.Find("Player1").transform;
@@ -103,8 +100,6 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-<<<<<<< Updated upstream
-=======
     void MeleeAttack()
     {
         GameObject player = GameObject.Find("Player1");
@@ -123,7 +118,6 @@ public class EnemyAI : MonoBehaviour
 
     }
 
->>>>>>> Stashed changes
     private void ResetAttack()
     {
         alreadyAttacked = false;

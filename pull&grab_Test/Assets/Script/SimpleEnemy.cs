@@ -34,9 +34,6 @@ public class SimpleEnemy : MonoBehaviour
     private EnemyAI AI;
     private NavMeshAgent navMeshAgent;
 
-<<<<<<< Updated upstream
-    
-=======
     public bool isShieldOn;
     public GameObject shield;
 
@@ -49,7 +46,6 @@ public class SimpleEnemy : MonoBehaviour
 
     public float bodyHp;
 
->>>>>>> Stashed changes
     // Start is called before the first frame update
     void Start()
     {
@@ -67,6 +63,8 @@ public class SimpleEnemy : MonoBehaviour
         if(CurArmor == 0)
         {
             this.gameObject.layer = 0;
+
+            shield.SetActive(false);
         }
 
         if (CurrentHp <= 0)
@@ -96,8 +94,6 @@ public class SimpleEnemy : MonoBehaviour
         if (!wasFalling && isFalling) 
         {
             startOfFall = transform.position.y;
-
-
         }
 
         if(!wasGrounded && _grounded)

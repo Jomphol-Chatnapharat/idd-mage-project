@@ -33,6 +33,12 @@ public class PlayerBehavior : MonoBehaviour
 
     public bool isCharging = false;
 
+    public float potionLeft;
+    public float potionHeal;
+
+    public float aetherLeft;
+    public float aetherHeal;
+
     void Start()
     {
         currentHP = maxHP;
@@ -156,8 +162,6 @@ public class PlayerBehavior : MonoBehaviour
         SetHealthImageAmount(currentHP / maxHP);
         SetManaImageAmount(currentMana / maxMana);
 
-<<<<<<< Updated upstream
-=======
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (potionLeft > 0)
@@ -177,8 +181,6 @@ public class PlayerBehavior : MonoBehaviour
                 aetherIndicator.text = "Aether: " + aetherLeft;
             }
         }
-
->>>>>>> Stashed changes
     }
 
     void ManaRegen()

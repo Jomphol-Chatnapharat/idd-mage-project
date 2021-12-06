@@ -21,10 +21,6 @@ public class Box : MonoBehaviour
         //TargetEnemy = GameObject.FindGameObjectWithTag("Enemy");
     }
 
-<<<<<<< Updated upstream
-    void Update()
-    {
-=======
     private void Update()
     {
         if (BoxRb.velocity.magnitude > maxSpeed)
@@ -38,17 +34,13 @@ public class Box : MonoBehaviour
         }
     }
 
-    private void OnMouseEnter()
-    {
-        if (!BoxRb.isKinematic)
-        {
-            GetComponent<Outlinable>().enabled = true;
-        }
-    }
->>>>>>> Stashed changes
-
-    }
-
+    //private void OnMouseEnter()
+    //{
+    //    if (!BoxRb.isKinematic)
+    //    {
+    //        GetComponent<Outlinable>().enabled = true;
+    //    }
+    //}
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Enemy")
