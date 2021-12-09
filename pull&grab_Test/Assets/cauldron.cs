@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,10 +14,20 @@ public class cauldron : MonoBehaviour
     public float monster3Need;
     public float monster4Need;
 
+    [SerializeField] private TextMeshProUGUI enemyType1;
+    [SerializeField] private TextMeshProUGUI enemyType2;
+
+    private int enemyCount1;
+    private int enemyCount2;
+    
+    private int maxCount = 3;
     private void Start()
     {
         canvas.SetActive(true);
         endCanvas.SetActive(false);
+
+        enemyType1.text = $"Close-range enemy : 0/{maxCount}";
+        enemyType2.text = $"Long-range enemy  : 0/{maxCount}";
     }
 
     private void OnTriggerEnter(Collider other)
@@ -29,6 +40,8 @@ public class cauldron : MonoBehaviour
             {
                 if (monster1Need > 0)
                 {
+                    enemyCount1++;
+                    enemyType1.text = $"Close-range enemy : {enemyCount1}/{maxCount}";
                     monster1Need -= 1;
                     Destroy(other.gameObject);
                 }
@@ -38,6 +51,8 @@ public class cauldron : MonoBehaviour
             {
                 if (monster2Need > 0)
                 {
+                    enemyCount2++;
+                    enemyType2.text = $"Long-range enemy  : {enemyCount2}/{maxCount}";
                     monster2Need -= 1;
                     Destroy(other.gameObject);
                 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using EPOOutline;
 using UnityEngine;
 
 public class Box : MonoBehaviour
@@ -34,13 +35,19 @@ public class Box : MonoBehaviour
         }
     }
 
-    //private void OnMouseEnter()
-    //{
-    //    if (!BoxRb.isKinematic)
-    //    {
-    //        GetComponent<Outlinable>().enabled = true;
-    //    }
-    //}
+    private void OnMouseEnter()
+    {
+        if (!BoxRb.isKinematic)
+        {
+            GetComponent<Outlinable>().enabled = true;
+        }
+    }
+    
+    private void OnMouseExit()
+    {
+        GetComponent<Outlinable>().enabled = false;
+    }
+
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Enemy")
