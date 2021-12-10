@@ -91,9 +91,8 @@ public class EnemyAI : MonoBehaviour
 
         if (!alreadyAttacked)
         {
-            GameObject player = GameObject.Find("Player1");
-
-            player.GetComponent<PlayerBehavior>().currentHP -= attackDmg;
+            if (melee) MeleeAttack();
+            if (range) RangeAttack();
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttack);
