@@ -5,7 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/EnemyCollectingTest.unity
+    guid: ba16cb5fbc2054f4e853f0c56a413019
   - enabled: 1
-    path: Assets/Scenes/Level1.unity
-    guid: cefa15234ebf6514b8dcbbe29b969a5e
+    path: Assets/Scenes/EnemyCaptureTest.unity
+    guid: ec6ee27bd12616f428d4a9c11557d85c
+  - enabled: 1
+    path: Assets/Scenes/TownTest.unity
+    guid: a09c1a61f18c6a14a9da32dee71dee67
   m_configObjects: {}

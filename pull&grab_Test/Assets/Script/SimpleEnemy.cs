@@ -44,7 +44,7 @@ public class SimpleEnemy : MonoBehaviour
     bool isStun = false;
     public float stunTime;
 
-    public float bodyHp;
+    public InventoryData referenceItem;
 
     // Start is called before the first frame update
     void Start()
@@ -79,11 +79,6 @@ public class SimpleEnemy : MonoBehaviour
         if (enemyRb.velocity.magnitude > maxSpeed)
         {
             enemyRb.velocity = Vector3.ClampMagnitude(enemyRb.velocity, maxSpeed);
-        }
-
-        if (bodyHp <= 0)
-        {
-            Destroy(this.gameObject);
         }
     }
 
@@ -130,6 +125,11 @@ public class SimpleEnemy : MonoBehaviour
         AI.enabled = true;
         navMeshAgent.enabled = true;
 
+        if (AI.suicide)
+        {
+            AI.bombCount = 0;
+        }
+
         isStun = false;
     }
 
@@ -169,14 +169,22 @@ public class SimpleEnemy : MonoBehaviour
             CurArmor = 0;
         }
 
-        if (CurrentHp <= 0)
-        {
-            bodyHp -= 1;
-        }
         UIManager.instance.SetDamagePopupText("-" + Damage, transform.position);
         SetHealthImageAmount(CurrentHp / MaxHp);
     }
-    
+
+    public void StoreEnemy()
+    {
+        invTest inventory = FindObjectOfType<invTest>();
+        inventory.CheckInv();
+        if (!inventory.invFull)
+        {
+            inventory.AddToInv(referenceItem);
+
+            Destroy(gameObject);
+        }
+    }
+
     public void SetHealthImageAmount(float newAmount)
     {
         fillImage.fillAmount = newAmount;

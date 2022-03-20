@@ -1,0 +1,3 @@
+rep "pull&grab_Test@tjrproject@cloud"
+  path "/"
+    smartbranch "/main"

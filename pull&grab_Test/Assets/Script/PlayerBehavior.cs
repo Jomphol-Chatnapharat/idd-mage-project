@@ -9,11 +9,12 @@ public class PlayerBehavior : MonoBehaviour
 {
     [SerializeField] Camera cam;
     [SerializeField] float maxGrabDistance = 10f, throwForce = 20f, lerpSpeed = 10f;
-    [SerializeField] Transform objectHolder;
     [SerializeField] LayerMask LayerMask;
     [SerializeField] GameObject grabObj;
+    public Transform objectHolder;
 
-    Rigidbody grabbedRB;
+    public Rigidbody grabbedRB;
+    public bool holdingObj = false;
 
     public Image hpBar;
     public Image manaBar;
@@ -39,18 +40,43 @@ public class PlayerBehavior : MonoBehaviour
     public float aetherLeft;
     public float aetherHeal;
 
+    public Canvas invCanvas;
+    public bool onInv = false;
+
+    public float currentGold;
+    public Text goldCount;
+
+    public static PlayerBehavior Instance;
+
+    public GameObject can;
+
     void Start()
     {
+        if(Instance != null)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        Instance = this;
+
+        GameObject.DontDestroyOnLoad(this.gameObject);
+
         currentHP = maxHP;
         currentMana = maxMana;
 
         potionIndicator.text = "Potion: " + potionLeft;
-        aetherIndicator.text = "Aether: " + aetherLeft;
+        aetherIndicator.text = "Energy Drink: " + aetherLeft;
+    }
+
+
+    private void Awake()
+    {
+        invCanvas.gameObject.SetActive(false);
     }
 
     void Update()
     {
-
         if (Input.GetMouseButton(1))
         {
             isCharging = true;
@@ -59,6 +85,34 @@ public class PlayerBehavior : MonoBehaviour
         if (Input.GetMouseButtonUp(1))
         {
             isCharging = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (onInv)
+            {
+                invCanvas.gameObject.SetActive(false);
+                onInv = false;
+
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+            else
+            {
+                RaycastHit hit;
+                Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+                if (Physics.Raycast(ray, out hit, maxGrabDistance, LayerMask))
+                {
+                    if (hit.collider.gameObject.GetComponent<Box>())
+                    {
+                        invCanvas.gameObject.SetActive(true);
+                        onInv = true;
+
+                        Cursor.lockState = CursorLockMode.Confined;
+                        Cursor.visible = true;
+                    }
+                }
+            }
         }
 
         if (isCharging == false)
@@ -78,6 +132,7 @@ public class PlayerBehavior : MonoBehaviour
                         if (grabObj.GetComponent<SimpleEnemy>() != null)
                         {
                             grabObj.GetComponent<SimpleEnemy>().unlease = true;
+                            holdingObj = false;
                             Debug.Log("let go");
                         }
 
@@ -99,6 +154,7 @@ public class PlayerBehavior : MonoBehaviour
                     if (grabObj.GetComponent<SimpleEnemy>() != null)
                     {
                         grabObj.GetComponent<SimpleEnemy>().unlease = true;
+                        holdingObj = false;
                     }
 
                     grabbedRB.isKinematic = false;
@@ -118,21 +174,7 @@ public class PlayerBehavior : MonoBehaviour
                         grabbedRB = hit.collider.gameObject.GetComponent<Rigidbody>();
                         if (grabbedRB)
                         {
-
-
-                            grabbedRB.isKinematic = true;
-                            grabObj = grabbedRB.gameObject;
-
-                            if (grabObj.GetComponent<SimpleEnemy>() != null)
-                            {
-                                grabObj.GetComponent<SimpleEnemy>().unlease = false;
-                            }
-
-                            if (grabObj.GetComponent<EnemyAI>() != null) 
-                            {
-                                grabObj.GetComponent<EnemyAI>().enabled = false;
-                                grabObj.GetComponent<NavMeshAgent>().enabled = false;
-                            }
+                            HoldingObj();
                         }
                     }
                 }
@@ -169,6 +211,10 @@ public class PlayerBehavior : MonoBehaviour
                 currentHP += potionHeal;
                 potionLeft -= 1;
                 potionIndicator.text = "Potion: " + potionLeft;
+
+                Vector3 canPos = objectHolder.transform.position;
+                Quaternion rotation = objectHolder.transform.rotation;
+                Instantiate(can, canPos, rotation);
             }
         }
 
@@ -178,9 +224,14 @@ public class PlayerBehavior : MonoBehaviour
             {
                 currentMana += aetherHeal;
                 aetherLeft -= 1;
-                aetherIndicator.text = "Aether: " + aetherLeft;
+                aetherIndicator.text = "Energy Drink: " + aetherLeft;
+
+                Vector3 canPos = objectHolder.transform.position;
+                Quaternion rotation = objectHolder.transform.rotation;
+                Instantiate(can, canPos, rotation);
             }
         }
+        goldCount.text = "Gold: " + currentGold;
     }
 
     void ManaRegen()
@@ -200,5 +251,30 @@ public class PlayerBehavior : MonoBehaviour
     public void SetManaImageAmount(float newAmount)
     {
         manaBar.fillAmount = newAmount;
+    }
+
+    public void HoldingObj()
+    {
+        holdingObj = true;
+
+        grabbedRB.isKinematic = true;
+        grabObj = grabbedRB.gameObject;
+
+        if (grabObj.GetComponent<SimpleEnemy>() != null)
+        {
+            grabObj.GetComponent<SimpleEnemy>().unlease = false;
+        }
+
+        if (grabObj.GetComponent<EnemyAI>() != null)
+        {
+            grabObj.GetComponent<EnemyAI>().enabled = false;
+            grabObj.GetComponent<NavMeshAgent>().enabled = false;
+        }
+    }
+
+    public void GetGold()
+    {
+        currentGold += 10;
+
     }
 }

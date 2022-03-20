@@ -11,6 +11,8 @@ public class EnemyAI : MonoBehaviour
 
     public LayerMask whatIsGround, whatIsPlayer;
 
+    public SimpleEnemy enemy;
+
     public Vector3 walkPoint;
     bool walkPointSet;
     public float walkPointRange;
@@ -28,6 +30,9 @@ public class EnemyAI : MonoBehaviour
     public bool melee, range, suicide;
     public GameObject shooter;
 
+    public float bombCount = 3f;
+    public bool countStart = false;
+
     float distance;
 
     private void Awake()
@@ -44,10 +49,45 @@ public class EnemyAI : MonoBehaviour
 
         distance = Vector3.Distance(transform.position, playerLoc.position);
 
+        if (suicide && alreadyAttacked)
+        {
+            countStart = true;
+        }
+
+        if(countStart == true)
+        {
+            bombCount -= 1 * Time.deltaTime;
+
+            agent.enabled = false;
+        }
+
+        if (enemy.CurrentHp > 0 && bombCount <= 0)
+        {
+                Debug.Log("Boom");
+
+                Collider[] characters = Physics.OverlapSphere(transform.position, attackRange);
+
+                foreach (Collider character in characters)
+                {
+                    if (character.GetComponent<SimpleEnemy>() != null)
+                    {
+                        character.GetComponent<SimpleEnemy>().OnDamaged(50);
+                    }
+
+                    if (character.GetComponent<PlayerBehavior>() != null)
+                    {
+                        character.GetComponent<PlayerBehavior>().currentHP -= attackDmg;
+                    }
+
+                    Destroy(this.gameObject);
+                }
+        }
+
         if (!canSeePlayer && !canAttackPlayer) Patroling();
         if (canSeePlayer && !canAttackPlayer) Chasing();
         if (canSeePlayer && canAttackPlayer && distance > fleeRange) Attacking();
-        if (canSeePlayer && canAttackPlayer && range && distance < fleeRange) Flee();
+        if (canSeePlayer && canAttackPlayer && distance < fleeRange) Flee();
+        if (canSeePlayer && enemy.CurrentHp <= enemy.MaxHp / 2) Flee();
     }
 
     private void Patroling()
@@ -86,17 +126,20 @@ public class EnemyAI : MonoBehaviour
     private void Attacking()
     {
         agent.SetDestination(transform.position);
-
         transform.LookAt(playerLoc);
+
 
         if (!alreadyAttacked)
         {
+            agent.speed = 0;
+            Debug.Log("attacking");
             if (melee) MeleeAttack();
             if (range) RangeAttack();
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttack);
         }
+
     }
 
     void MeleeAttack()
@@ -109,6 +152,7 @@ public class EnemyAI : MonoBehaviour
     void RangeAttack()
     {
         float distance = Vector3.Distance(transform.position, playerLoc.position);
+        Debug.Log("shooting");
 
         if (distance > fleeRange)
         {
@@ -120,6 +164,7 @@ public class EnemyAI : MonoBehaviour
     private void ResetAttack()
     {
         alreadyAttacked = false;
+        agent.speed = 4;
     }
 
     private void OnDrawGizmosSelected()

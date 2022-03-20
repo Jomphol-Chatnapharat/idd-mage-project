@@ -13,7 +13,7 @@ public class Box : MonoBehaviour
 
     private GameObject TargetEnemy;
 
-    public float bodyHp;
+    public Box Instance;
 
     void Awake()
     {
@@ -22,16 +22,24 @@ public class Box : MonoBehaviour
         //TargetEnemy = GameObject.FindGameObjectWithTag("Enemy");
     }
 
+    private void Start()
+    {
+        if (Instance != null)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        Instance = this;
+
+        GameObject.DontDestroyOnLoad(this.gameObject);
+    }
+
     private void Update()
     {
         if (BoxRb.velocity.magnitude > maxSpeed)
         {
             BoxRb.velocity = Vector3.ClampMagnitude(BoxRb.velocity, maxSpeed);
-        }
-
-        if (bodyHp <= 0)
-        {
-            Destroy(this.gameObject);
         }
     }
 
@@ -54,11 +62,24 @@ public class Box : MonoBehaviour
         {
             Vector3 vel = BoxRb.velocity;
 
-            if (vel.magnitude > minSpeed)
+            if (other.gameObject.GetComponent<SimpleEnemy>().CurrentHp > 0)
             {
-                other.gameObject.GetComponent<SimpleEnemy>().OnDamaged(BoxDmg);
+                if (vel.magnitude > minSpeed)
+                {
+                    other.gameObject.GetComponent<SimpleEnemy>().OnDamaged(BoxDmg);
+                }
+            }
 
-                bodyHp -= 1;
+            if (other.gameObject.GetComponent<SimpleEnemy>().CurrentHp <= 0)
+            {
+                invTest inventory = FindObjectOfType<invTest>();
+
+                other.gameObject.GetComponent<SimpleEnemy>().StoreEnemy();
+
+                if (!inventory.invFull)
+                {
+                    BoxDmg += 10;
+                }
             }
 
             BoxRb.velocity = Vector3.one;

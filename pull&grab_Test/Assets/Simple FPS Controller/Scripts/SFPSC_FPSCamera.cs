@@ -40,7 +40,7 @@ public class SFPSC_FPSCamera : MonoBehaviour
     public float maxDownAngle = -80;
     public Transform player;
     public Transform CameraPosition;
-    
+
     private void Awake()
     {
         cam = this;
@@ -48,8 +48,25 @@ public class SFPSC_FPSCamera : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        //player = GameObject.Find("Player1").transform;
+        //CameraPosition = GameObject.Find("CameraPosition").transform;
     }
-    
+
+    private void Start()
+    {
+
+        //if (cam != null)
+        //{
+        //    Destroy(this.gameObject);
+        //    return;
+        //}
+
+        //cam = this;
+
+        //GameObject.DontDestroyOnLoad(this.gameObject);
+    }
+
     private float rotX = 0.0f, rotY = 0.0f;
     [HideInInspector]
     public float rotZ = 0.0f;
